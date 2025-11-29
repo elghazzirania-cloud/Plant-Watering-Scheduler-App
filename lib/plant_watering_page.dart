@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'plant.dart';
-import 'empty_state.dart';
-import 'summary_card.dart';
+import 'empty_state.dart';//when there are no plants
+import 'summary_card.dart';//summary of all plants
 import 'plant_card.dart';
 import 'add_plant_dialog.dart';
 
@@ -13,7 +13,7 @@ class PlantWateringPage extends StatefulWidget {
 }
 
 class _PlantWateringPageState extends State<PlantWateringPage> {
-  final List<Plant> _plants = [
+  final List<Plant> _plants = [//some default plants that can be deleted
     Plant(
       name: 'Monstera',
       type: 'Indoor Plant',
@@ -43,7 +43,7 @@ class _PlantWateringPageState extends State<PlantWateringPage> {
   void _addPlant() {
     showDialog(
       context: context,
-      builder: (context) => AddPlantDialog(
+      builder: (context) => AddPlantDialog(//call to add plant
         onAdd: (plant) {
           setState(() {
             _plants.add(plant);
@@ -56,7 +56,7 @@ class _PlantWateringPageState extends State<PlantWateringPage> {
 
   void _waterPlant(int index) {
     setState(() {
-      _plants[index].lastWatered = DateTime.now();
+      _plants[index].lastWatered = DateTime.now();//Updates the lastWatered date of the plant.
     });
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -116,7 +116,7 @@ class _PlantWateringPageState extends State<PlantWateringPage> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton.extended(
+      floatingActionButton: FloatingActionButton.extended(//Button to add a new plant.
         onPressed: _addPlant,
         icon: const Icon(Icons.add),
         label: const Text('Add Plant'),

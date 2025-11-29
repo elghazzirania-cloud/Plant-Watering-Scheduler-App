@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:intl/intl.dart';//for formatting dates
 import 'plant.dart';
 
 class AddPlantDialog extends StatefulWidget {
-  final Function(Plant) onAdd;
+  final Function(Plant) onAdd;//when user add plant
 
   const AddPlantDialog({super.key, required this.onAdd});
 
@@ -12,7 +12,7 @@ class AddPlantDialog extends StatefulWidget {
 }
 
 class _AddPlantDialogState extends State<AddPlantDialog> {
-  final _formKey = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();//Form validation
   final _nameController = TextEditingController();
   final _typeController = TextEditingController();
   final _notesController = TextEditingController();
@@ -32,7 +32,7 @@ class _AddPlantDialogState extends State<AddPlantDialog> {
   ];
 
   @override
-  void dispose() {
+  void dispose() { //close the controllers
     _nameController.dispose();
     _typeController.dispose();
     _notesController.dispose();
@@ -47,7 +47,7 @@ class _AddPlantDialogState extends State<AddPlantDialog> {
       firstDate: DateTime.now().subtract(const Duration(days: 365)),
       lastDate: DateTime.now(),
     );
-    if (picked != null) {
+    if (picked != null) {//change state
       setState(() {
         _lastWatered = picked;
       });
@@ -55,7 +55,7 @@ class _AddPlantDialogState extends State<AddPlantDialog> {
   }
 
   void _submit() {
-    if (_formKey.currentState!.validate()) {
+    if (_formKey.currentState!.validate()) {//check the info validation
       final plant = Plant(
         name: _nameController.text,
         type: _typeController.text,
@@ -64,7 +64,7 @@ class _AddPlantDialogState extends State<AddPlantDialog> {
         notes: _notesController.text,
         color: _selectedColor,
       );
-      widget.onAdd(plant);
+      widget.onAdd(plant);//add the plant
     }
   }
 
@@ -74,7 +74,7 @@ class _AddPlantDialogState extends State<AddPlantDialog> {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
       ),
-      child: SingleChildScrollView(
+      child: SingleChildScrollView(//to scroll in long page
         child: Padding(
           padding: const EdgeInsets.all(24),
           child: Form(
@@ -172,7 +172,7 @@ class _AddPlantDialogState extends State<AddPlantDialog> {
                   ),
                 ),
                 const SizedBox(height: 8),
-                Wrap(
+                Wrap(//display colors to choose one
                   spacing: 12,
                   children: _colorOptions.map((color) {
                     return GestureDetector(
@@ -211,7 +211,7 @@ class _AddPlantDialogState extends State<AddPlantDialog> {
                     ),
                     const SizedBox(width: 8),
                     ElevatedButton(
-                      onPressed: _submit,
+                      onPressed: _submit,//add plant
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.green,
                         foregroundColor: Colors.white,

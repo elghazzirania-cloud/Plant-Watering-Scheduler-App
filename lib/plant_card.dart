@@ -4,8 +4,8 @@ import 'plant.dart';
 
 class PlantCard extends StatelessWidget {
   final Plant plant;
-  final VoidCallback onWater;
-  final VoidCallback onDelete;
+  final VoidCallback onWater; //call when click Mark as Watered
+  final VoidCallback onDelete;//call when click delete
 
   const PlantCard({
     super.key,
@@ -17,9 +17,9 @@ class PlantCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final dateFormat = DateFormat('MMM dd, yyyy');
-    final isOverdue = plant.needsWatering;
+    final isOverdue = plant.needsWatering;//check if plant need water
 
-    return Container(
+    return Container(//card form
       margin: const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surface,
