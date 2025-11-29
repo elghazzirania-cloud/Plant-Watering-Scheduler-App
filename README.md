@@ -5,7 +5,7 @@ A simple and intuitive Flutter app to help users manage and track watering sched
 # 📌 Overview
 
 The Plant Watering Schedule Manager is a lightweight mobile application designed to remind users when each plant needs watering. It allows users to add plants, assign watering intervals, and keep track of the next watering date — all within a clean, single-page UI.
-No backend or external database is used; the app currently stores data locally in memory (or optionally using local storage if you add it later).
+No backend or external database is used.
 
 # ✨ Features
 
@@ -35,7 +35,6 @@ Flutter (Dart)
 
 Single-page architecture
 
-Local state management (e.g., setState or Provider if you choose)
 
 No backend or database yet
 
@@ -52,7 +51,7 @@ flutter run
 
 # 📌 Future Improvements
 
-You can add these later:
+ Adding these later:
 
 ☁️ Cloud sync (Firebase)
 
