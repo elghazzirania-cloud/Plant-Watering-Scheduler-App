@@ -41,7 +41,7 @@ No backend or database yet
 
 # ▶️ Getting Started
 1. Clone the repo
-git clone https://github.com/your-username/plant-watering-scheduler.git
+git clone https://github.com/elghazzirania-cloud/Plant-Watering-Scheduler-App.git
 cd plant-watering-scheduler
 
 2. Install dependencies
