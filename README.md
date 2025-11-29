@@ -26,8 +26,8 @@ No backend or external database is used.
 (Add screenshots here when available)
 You can insert them like:
 
-![Home Screen](screenshots/home.png)
-![Add Plant Screen](screenshots/add_plant.png)
+![Home Screen](homescreen.png)
+![Add Plant Screen](addplant.png)
 
 # 🛠️ Tech Stack
 
@@ -53,9 +53,9 @@ flutter run
 
  Adding these later:
 
-☁️ Cloud sync (Firebase)
+☁️ Cloud sync 
 
-📦 Local database (Hive / SQLite)
+📦 Local database 
 
 🔔 Push notifications
 
