@@ -23,9 +23,6 @@ No backend or external database is used.
 
 # 📱 Screenshots
 
-(Add screenshots here when available)
-You can insert them like:
-
 ![Home Screen](homescreen.png)
 ![Add Plant Screen](addplant.png)
 
