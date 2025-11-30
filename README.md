@@ -25,7 +25,7 @@ No backend or external database is used.
 
 
 ![Home Screen](homescreen.png)
-![Add Plant Screen](screenshots/add_plant.png)
+![Add Plant Screen](addplant.png)
 
 # 🛠️ Tech Stack
 
