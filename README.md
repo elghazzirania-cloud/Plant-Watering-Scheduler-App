@@ -51,9 +51,7 @@ flutter run
 
  Adding these later:
 
-☁️ Cloud sync (Firebase)
-
-📦 Local database (Hive / SQLite)
+📦 Local database 
 
 🔔 Push notifications
 
