@@ -26,7 +26,7 @@ No backend or external database is used.
 (Add screenshots here when available)
 You can insert them like:
 
-![Home Screen](screenshots/home.png)
+![Home Screen](homescreen.png)
 ![Add Plant Screen](screenshots/add_plant.png)
 
 # 🛠️ Tech Stack
