@@ -27,7 +27,7 @@ No backend or external database is used.
 ![Home Screen](home.png)
 ![Add Plant Screen](addplant.png)
 ![loginform Screen](https://github.com/elghazzirania-cloud/Plant-Watering-Scheduler-App/blob/02f7c978027c1a3051967644e6f0458b0f63aa47/login%20form.png)
-![signup Screen]()
+![signup Screen](https://github.com/elghazzirania-cloud/Plant-Watering-Scheduler-App/blob/01684e4d8b3b04fc08de8ef20b4624f3b1b86f7a/sign%20up.png)
 # 🛠️ Tech Stack
 
 Flutter (Dart)
