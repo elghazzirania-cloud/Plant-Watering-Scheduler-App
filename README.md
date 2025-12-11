@@ -26,8 +26,8 @@ No backend or external database is used.
 
 ![Home Screen](home.png)
 ![Add Plant Screen](addplant.png)
-![Login Screen](login form.png)
-![Signup Screen]sign up.png()
+![Login form Screen](loginform.png)
+![Signup Screen](signup.png)
 
 # 🛠️ Tech Stack
 
