@@ -26,9 +26,8 @@ No backend or external database is used.
 
 ![Home Screen](home.png)
 ![Add Plant Screen](addplant.png)
-![Loginform Screen](loginform.png)
-![Signup Screen](signup.png)
-
+![loginform Screen]()
+![signup Screen]()
 # 🛠️ Tech Stack
 
 Flutter (Dart)
