@@ -40,6 +40,43 @@ class _PlantWateringPageState extends State<PlantWateringPage> {
     ),
   ];
 
+  @override
+  void initState() {
+    super.initState();
+    // Check for overdue plants after the widget is built
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _checkOverduePlants();
+    });
+  }
+
+  void _checkOverduePlants() {
+    final overduePlants = _plants.where((plant) => plant.needsWatering).toList();
+    if (overduePlants.isNotEmpty 
+        && mounted) {
+        
+      final plantNames = overduePlants.map((p) => p.name).join(', ');
+      final count = overduePlants.length;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            count == 1
+                ? '⚠️ $plantNames needs watering!'
+                : '⚠️ $count plants need watering: $plantNames',
+          ),
+          backgroundColor: Colors.red[600],
+          duration: const Duration(seconds: 4),
+          action: SnackBarAction(
+            label: 'Dismiss',
+            textColor: Colors.white,
+            onPressed: () {
+              ScaffoldMessenger.of(context).hideCurrentSnackBar();
+            },
+          ),
+        ),
+      );
+    }
+  }
+
   void _addPlant() {
     showDialog(
       context: context,

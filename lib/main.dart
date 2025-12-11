@@ -1,13 +1,7 @@
 import 'package:flutter/material.dart';
 import 'main_navigation.dart';
-import 'notification_service.dart'; // NEW IMPORT
-
-final NotificationService notificationService = NotificationService();
 
 void main() async {
-  // Main must be async now
-  WidgetsFlutterBinding.ensureInitialized();
-  await notificationService.init(); // Initialize the service
   runApp(const PlantWateringApp());
 }
 
