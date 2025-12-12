@@ -1,16 +1,9 @@
 import 'package:flutter/material.dart';
-import 'plant_watering_page.dart';
-import 'notification_service.dart'; // NEW IMPORT
+import 'main_navigation.dart';
 
-final NotificationService notificationService = NotificationService();
-
-void main() async { // Main must be async now
-  WidgetsFlutterBinding.ensureInitialized();
-  await notificationService.init(); // Initialize the service
+void main() async {
   runApp(const PlantWateringApp());
 }
-
-
 
 class PlantWateringApp extends StatelessWidget {
   const PlantWateringApp({super.key});
@@ -27,7 +20,7 @@ class PlantWateringApp extends StatelessWidget {
           brightness: Brightness.light,
         ),
       ),
-      home: const PlantWateringPage(),
+      home: const MainNavigation(),
       debugShowCheckedModeBanner: false,
     );
   }

@@ -23,34 +23,34 @@ No backend or external database is used.
 
 # 📱 Screenshots
 
-![Home Screen](homescreen.png)
-![Add Plant Screen](addplant.png)
 
+![Home Screen](home.png)
+![Add Plant Screen](addplant.png)
+![loginform Screen](https://github.com/elghazzirania-cloud/Plant-Watering-Scheduler-App/blob/02f7c978027c1a3051967644e6f0458b0f63aa47/login%20form.png)
+![signup Screen](https://github.com/elghazzirania-cloud/Plant-Watering-Scheduler-App/blob/01684e4d8b3b04fc08de8ef20b4624f3b1b86f7a/sign%20up.png)
 # 🛠️ Tech Stack
 
 Flutter (Dart)
 
 Single-page architecture
 
-
 No backend or database yet
 
 # ▶️ Getting Started
+
 1. Clone the repo
-git clone https://github.com/elghazzirania-cloud/Plant-Watering-Scheduler-App.git
-cd plant-watering-scheduler
+   git clone https://github.com/elghazzirania-cloud/Plant-Watering-Scheduler-App.git
+   cd plant-watering-scheduler
 
 2. Install dependencies
-flutter pub get
+   flutter pub get
 
 3. Run the app
-flutter run
+   flutter run
 
 # 📌 Future Improvements
 
- Adding these later:
-
-☁️ Cloud sync 
+Adding these later:
 
 📦 Local database 
 
