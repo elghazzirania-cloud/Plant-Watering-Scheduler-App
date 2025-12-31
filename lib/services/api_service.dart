@@ -5,12 +5,12 @@ import '../plant.dart';
 class ApiService {
   static const String baseUrl = 'https://plantswatering.atwebpages.com';
 
-  // Helper method to format DateTime for PHP backend (Y-m-d H:i:s)
+ 
   static String _formatDateTime(DateTime dateTime) {
     return '${dateTime.year}-${dateTime.month.toString().padLeft(2, '0')}-${dateTime.day.toString().padLeft(2, '0')} ${dateTime.hour.toString().padLeft(2, '0')}:${dateTime.minute.toString().padLeft(2, '0')}:${dateTime.second.toString().padLeft(2, '0')}';
   }
 
-  // Helper method to handle API responses
+  
   static Map<String, dynamic> _handleResponse(http.Response response) {
     if (response.statusCode >= 200 && response.statusCode < 300) {
       return json.decode(response.body);
@@ -20,13 +20,13 @@ class ApiService {
     }
   }
 
-  // Login user
+
   static Future<Map<String, dynamic>> login(
     String email,
     String password,
   ) async {
     try {
-      // Encode form data properly
+  
       final body = Uri(
         queryParameters: {'email': email, 'password': password},
       ).query;
@@ -66,7 +66,7 @@ class ApiService {
     }
   }
 
-  // Sign up user
+
   static Future<Map<String, dynamic>> signup(
     String username,
     String email,
@@ -117,7 +117,7 @@ class ApiService {
     }
   }
 
-  // Get all plants for a user
+
   static Future<List<Plant>> getPlants(int userId) async {
     try {
       final response = await http.get(
@@ -136,7 +136,7 @@ class ApiService {
     }
   }
 
-  // Add a new plant
+ 
   static Future<int> addPlant({
     required int userId,
     required String name,
@@ -172,7 +172,7 @@ class ApiService {
     }
   }
 
-  // Mark plant as watered
+
   static Future<void> waterPlant(int plantId, int userId) async {
     try {
       final response = await http.post(
@@ -194,7 +194,7 @@ class ApiService {
     }
   }
 
-  // Delete a plant
+
   static Future<void> deletePlant(int plantId, int userId) async {
     try {
       final response = await http.post(
