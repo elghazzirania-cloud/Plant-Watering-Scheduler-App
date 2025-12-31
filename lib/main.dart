@@ -21,6 +21,7 @@ class PlantWateringApp extends StatelessWidget {
         ),
       ),
       home: const MainNavigation(),
+      routes: {'/home': (context) => const MainNavigation()},
       debugShowCheckedModeBanner: false,
     );
   }

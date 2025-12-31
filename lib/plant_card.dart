@@ -102,9 +102,9 @@ class PlantCard extends StatelessWidget {
                 _InfoRow(
                   icon: Icons.schedule,
                   label: 'Next Watering',
-                  value: dateFormat.format(plant.nextWateringDate),
-                ),
-                const SizedBox(height: 12),
+                    value: dateFormat.format(plant.nextWateringDate),
+                  ),
+                  const SizedBox(height: 12),
                 Container(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 12,

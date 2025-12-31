@@ -4,6 +4,8 @@ import 'empty_state.dart';//when there are no plants
 import 'summary_card.dart';//summary of all plants
 import 'plant_card.dart';
 import 'add_plant_dialog.dart';
+import 'services/api_service.dart';
+import 'services/auth_service.dart';
 
 class PlantWateringPage extends StatefulWidget {
   const PlantWateringPage({super.key});
@@ -13,40 +15,51 @@ class PlantWateringPage extends StatefulWidget {
 }
 
 class _PlantWateringPageState extends State<PlantWateringPage> {
-  final List<Plant> _plants = [//some default plants that can be deleted
-    Plant(
-      name: 'Monstera',
-      type: 'Indoor Plant',
-      lastWatered: DateTime.now().subtract(const Duration(days: 3)),
-      wateringIntervalDays: 7,
-      notes: 'Likes indirect sunlight',
-      color: Colors.green,
-    ),
-    Plant(
-      name: 'Snake Plant',
-      type: 'Succulent',
-      lastWatered: DateTime.now().subtract(const Duration(days: 10)),
-      wateringIntervalDays: 14,
-      notes: 'Very low maintenance',
-      color: Colors.teal,
-    ),
-    Plant(
-      name: 'Peace Lily',
-      type: 'Flowering Plant',
-      lastWatered: DateTime.now().subtract(const Duration(days: 2)),
-      wateringIntervalDays: 5,
-      notes: 'Keep soil moist',
-      color: Colors.lightGreen,
-    ),
-  ];
+  List<Plant> _plants = [];
+  bool _isLoading = true;
+  int? _userId;
 
   @override
   void initState() {
     super.initState();
-    // Check for overdue plants after the widget is built
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _checkOverduePlants();
+    _loadPlants();
+  }
+
+  Future<void> _loadPlants() async {
+    setState(() {
+      _isLoading = true;
     });
+
+    try {
+      _userId = await AuthService.getCurrentUserId();
+      if (_userId != null) {
+        final plants = await ApiService.getPlants(_userId!);
+        setState(() {
+          _plants = plants;
+          _isLoading = false;
+        });
+        // Check for overdue plants after loading
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          _checkOverduePlants();
+        });
+      } else {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    } catch (e) {
+      setState(() {
+        _isLoading = false;
+      });
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Failed to load plants: ${e.toString()}'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
   }
 
   void _checkOverduePlants() {
@@ -77,37 +90,149 @@ class _PlantWateringPageState extends State<PlantWateringPage> {
     }
   }
 
-  void _addPlant() {
+  void _addPlant() async {
+    if (_userId == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please log in to add plants'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
     showDialog(
       context: context,
-      builder: (context) => AddPlantDialog(//call to add plant
-        onAdd: (plant) {
-          setState(() {
-            _plants.add(plant);
-          });
-          Navigator.of(context).pop();
+      builder: (context) => AddPlantDialog(
+        onAdd: (plant) async {
+          Navigator.of(context).pop(); // Close dialog first
+          
+          try {
+            final plantId = await ApiService.addPlant(
+              userId: _userId!,
+              name: plant.name,
+              type: plant.type,
+              lastWatered: plant.lastWatered,
+              wateringIntervalDays: plant.wateringIntervalDays,
+              notes: plant.notes,
+              color: _colorToString(plant.color),
+            );
+            
+            // Update plant with ID from server
+            plant.id = plantId;
+            
+            if (mounted) {
+              setState(() {
+                _plants.add(plant);
+              });
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Plant added successfully!'),
+                  backgroundColor: Colors.green,
+                ),
+              );
+            }
+          } catch (e) {
+            if (mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('Failed to add plant: ${e.toString()}'),
+                  backgroundColor: Colors.red,
+                ),
+              );
+            }
+          }
         },
       ),
     );
   }
 
-  void _waterPlant(int index) {
-    setState(() {
-      _plants[index].lastWatered = DateTime.now();//Updates the lastWatered date of the plant.
-    });
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('${_plants[index].name} has been watered!'),
-        backgroundColor: Colors.green,
-        duration: const Duration(seconds: 2),
-      ),
-    );
+  String _colorToString(Color color) {
+    // Convert Color to hex string
+    return '#${color.value.toRadixString(16).substring(2).toUpperCase()}';
   }
 
-  void _deletePlant(int index) {
-    setState(() {
-      _plants.removeAt(index);
-    });
+  void _waterPlant(int index) async {
+    if (_userId == null || _plants[index].id == null) return;
+
+    try {
+      await ApiService.waterPlant(_plants[index].id!, _userId!);
+      
+      setState(() {
+        _plants[index].lastWatered = DateTime.now();
+      });
+      
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('${_plants[index].name} has been watered!'),
+            backgroundColor: Colors.green,
+            duration: const Duration(seconds: 2),
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Failed to update plant: ${e.toString()}'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
+  }
+
+  void _deletePlant(int index) async {
+    if (_userId == null || _plants[index].id == null) return;
+
+    // Show confirmation dialog
+    final confirm = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Delete Plant'),
+        content: Text('Are you sure you want to delete ${_plants[index].name}?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            style: TextButton.styleFrom(foregroundColor: Colors.red),
+            child: const Text('Delete'),
+          ),
+        ],
+      ),
+    );
+
+    if (confirm == true) {
+      try {
+        await ApiService.deletePlant(_plants[index].id!, _userId!);
+        
+        setState(() {
+          _plants.removeAt(index);
+        });
+        
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Plant deleted successfully'),
+              backgroundColor: Colors.green,
+            ),
+          );
+        }
+      } catch (e) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Failed to delete plant: ${e.toString()}'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      }
+    }
   }
 
   @override
@@ -132,9 +257,11 @@ class _PlantWateringPageState extends State<PlantWateringPage> {
             ],
           ),
         ),
-        child: _plants.isEmpty
-            ? const EmptyState()
-            : Column(
+        child: _isLoading
+            ? const Center(child: CircularProgressIndicator())
+            : _plants.isEmpty
+                ? const EmptyState()
+                : Column(
           children: [
             SummaryCard(plants: _plants),
             Expanded(
