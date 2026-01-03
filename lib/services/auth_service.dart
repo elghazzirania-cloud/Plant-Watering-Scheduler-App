@@ -3,41 +3,50 @@ import 'dart:convert';
 
 class AuthService {
   static const String _userKey = 'logged_in_user';
-  static const String _userIdKey = 'user_id';
 
-  
+
   static Future<void> saveUser(Map<String, dynamic> user) async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(_userKey, json.encode(user));
-    await prefs.setInt(_userIdKey, user['id'] as int);
+    String userJson = json.encode(user);
+    await prefs.setString(_userKey, userJson);
   }
 
+  
   static Future<Map<String, dynamic>?> getCurrentUser() async {
     final prefs = await SharedPreferences.getInstance();
-    final userJson = prefs.getString(_userKey);
-    if (userJson != null) {
-      return json.decode(userJson) as Map<String, dynamic>;
+    String? userJson = prefs.getString(_userKey);
+    
+    if (userJson == null) {
+      return null;
     }
-    return null;
+    
+    Map<String, dynamic> user = json.decode(userJson);
+    return user;
   }
 
-  
+ 
   static Future<int?> getCurrentUserId() async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getInt(_userIdKey);
-  }
-
-
-  static Future<bool> isLoggedIn() async {
-    final user = await getCurrentUser();
-    return user != null;
+    Map<String, dynamic>? user = await getCurrentUser();
+    
+    if (user == null) {
+      return null;
+    }
+    
+    int userId = user['id'];
+    return userId;
   }
 
   
+  static Future<bool> isLoggedIn() async {
+    final prefs = await SharedPreferences.getInstance();
+    bool hasUser = prefs.containsKey(_userKey);
+    return hasUser;
+  }
+
+ 
   static Future<void> logout() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(_userKey);
-    await prefs.remove(_userIdKey);
   }
 }
 

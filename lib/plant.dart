@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 
 class Plant {
-  int? id; // ID from database (null for new plants)
+  int? id;
   String name;
   String type;
   DateTime lastWatered;
@@ -22,17 +22,17 @@ class Plant {
     required this.color,
   });
 
-  // Convert from JSON (API response)
+
   factory Plant.fromJson(Map<String, dynamic> json) {
-    // Parse color from string (e.g., "#4CAF50" or color name)
-    Color plantColor = Colors.green; // default
+    
+    Color plantColor = Colors.green; 
     if (json['color'] != null) {
       final colorStr = json['color'].toString();
       if (colorStr.startsWith('#')) {
-        // Hex color
+        
         plantColor = Color(int.parse(colorStr.substring(1), radix: 16) + 0xFF000000);
       } else {
-        // Try to match color name
+       
         switch (colorStr.toLowerCase()) {
           case 'green':
             plantColor = Colors.green;
@@ -62,7 +62,7 @@ class Plant {
       }
     }
 
-    // Parse last_watered date
+    
     DateTime lastWateredDate;
     if (json['last_watered'] != null) {
       try {
@@ -89,14 +89,22 @@ class Plant {
     return lastWatered.add(Duration(days: wateringIntervalDays));
   }
 
+  
   bool get needsWatering {
-    return DateTime.now().isAfter(nextWateringDate) ||
-        DateTime.now().isAtSameMomentAs(nextWateringDate);
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final nextDate = DateTime(nextWateringDate.year, nextWateringDate.month, nextWateringDate.day);
+    return !nextDate.isAfter(today); 
   }
 
+  
   int get daysUntilWatering {
-    final difference = nextWateringDate.difference(DateTime.now());
-    return difference.inDays;
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final nextDate = DateTime(nextWateringDate.year, nextWateringDate.month, nextWateringDate.day);
+    final difference = nextDate.difference(today);
+    final days = difference.inDays;
+    return days < 0 ? 0 : days;
   }
 }
 

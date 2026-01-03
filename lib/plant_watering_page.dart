@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'plant.dart';
-import 'empty_state.dart';//when there are no plants
-import 'summary_card.dart';//summary of all plants
+import 'empty_state.dart';
+import 'summary_card.dart';
 import 'plant_card.dart';
 import 'add_plant_dialog.dart';
 import 'services/api_service.dart';
@@ -38,7 +38,7 @@ class _PlantWateringPageState extends State<PlantWateringPage> {
           _plants = plants;
           _isLoading = false;
         });
-        // Check for overdue plants after loading
+       
         WidgetsBinding.instance.addPostFrameCallback((_) {
           _checkOverduePlants();
         });
@@ -105,7 +105,7 @@ class _PlantWateringPageState extends State<PlantWateringPage> {
       context: context,
       builder: (context) => AddPlantDialog(
         onAdd: (plant) async {
-          Navigator.of(context).pop(); // Close dialog first
+          Navigator.of(context).pop(); 
           
           try {
             final plantId = await ApiService.addPlant(
@@ -118,7 +118,7 @@ class _PlantWateringPageState extends State<PlantWateringPage> {
               color: _colorToString(plant.color),
             );
             
-            // Update plant with ID from server
+           
             plant.id = plantId;
             
             if (mounted) {
@@ -148,7 +148,7 @@ class _PlantWateringPageState extends State<PlantWateringPage> {
   }
 
   String _colorToString(Color color) {
-    // Convert Color to hex string
+    
     return '#${color.value.toRadixString(16).substring(2).toUpperCase()}';
   }
 
@@ -186,7 +186,7 @@ class _PlantWateringPageState extends State<PlantWateringPage> {
   void _deletePlant(int index) async {
     if (_userId == null || _plants[index].id == null) return;
 
-    // Show confirmation dialog
+    
     final confirm = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
@@ -280,7 +280,7 @@ class _PlantWateringPageState extends State<PlantWateringPage> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton.extended(//Button to add a new plant.
+      floatingActionButton: FloatingActionButton.extended(
         onPressed: _addPlant,
         icon: const Icon(Icons.add),
         label: const Text('Add Plant'),
@@ -290,5 +290,3 @@ class _PlantWateringPageState extends State<PlantWateringPage> {
     );
   }
 }
-
-

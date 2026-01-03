@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'services/api_service.dart';
-import 'services/auth_service.dart';
 
 class SignUpScreen extends StatefulWidget {
   final VoidCallback? onNavigateToLogin;
@@ -42,28 +41,41 @@ class _SignUpScreenState extends State<SignUpScreen> {
           _emailController.text.trim(),
           _passwordController.text,
         );
+        
+        // ignore: avoid_print
+        print('SIGNUP RESPONSE: $response');
 
         if (response['status'] == 'success') {
-          // Save user data
-          await AuthService.saveUser(response['user']);
-
+         
           if (mounted) {
+           
+            _nameController.clear();
+            _emailController.clear();
+            _passwordController.clear();
+            _confirmPasswordController.clear();
+
+      
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
-                content: Text('Account created successfully!'),
+                content: Text('A new account has been created successfully. Please sign in.'),
                 backgroundColor: Colors.green,
-                duration: Duration(seconds: 2),
+                duration: Duration(seconds: 3),
               ),
             );
-            // Navigate to home
-            Navigator.of(context).pushReplacementNamed('/home');
           }
         }
       } catch (e) {
         if (mounted) {
+          final raw = e.toString().replaceAll('Exception: ', '');
+          final lower = raw.toLowerCase();
+         
+          final display = lower.contains('email') && lower.contains('exist')
+              ? 'Email already exists'
+              : raw;
+
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('Sign up failed: ${e.toString().replaceAll('Exception: ', '')}'),
+              content: Text(display),
               backgroundColor: Colors.red,
               duration: const Duration(seconds: 3),
             ),
@@ -104,7 +116,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 children: [
                   const SizedBox(height: 20),
                   const SizedBox(height: 20),
-                  // Icon
+                  
                   Center(
                     child: Container(
                       width: 80,
@@ -121,7 +133,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ),
                   ),
                   const SizedBox(height: 24),
-                  // Title
+                
                   Text(
                     'Create Account',
                     style: TextStyle(
@@ -138,7 +150,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 32),
-                  // Full Name Field
+                  
                   TextFormField(
                     controller: _nameController,
                     decoration: InputDecoration(
@@ -159,7 +171,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     },
                   ),
                   const SizedBox(height: 20),
-                  // Email Field
+                 
                   TextFormField(
                     controller: _emailController,
                     keyboardType: TextInputType.emailAddress,
@@ -184,7 +196,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     },
                   ),
                   const SizedBox(height: 20),
-                  // Password Field
+                 
                   TextFormField(
                     controller: _passwordController,
                     obscureText: _obscurePassword,
@@ -223,7 +235,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     },
                   ),
                   const SizedBox(height: 20),
-                  // Confirm Password Field
+                 
                   TextFormField(
                     controller: _confirmPasswordController,
                     obscureText: _obscureConfirmPassword,
@@ -260,7 +272,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     },
                   ),
                   const SizedBox(height: 32),
-                  // Sign Up Button
+                 
                   ElevatedButton(
                     onPressed: _isLoading ? null : _handleSignUp,
                     style: ElevatedButton.styleFrom(
@@ -290,7 +302,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           ),
                   ),
                   const SizedBox(height: 24),
-                  // Sign In Link
+                  
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
